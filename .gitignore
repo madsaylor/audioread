@@ -1,0 +1,7 @@
+.vite
+.idea
+backend/audio/
+backend/.DS_Store
+backend/__pychache__
+frontend/.vscode
+frontend/node_modules

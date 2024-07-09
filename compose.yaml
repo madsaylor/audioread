@@ -1,0 +1,22 @@
+services:
+  frontend:
+    build:
+      context: $PWD/frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - $PWD/frontend:/app
+    command: npm run dev
+    platform: linux/amd64
+  backend:
+    build:
+      context: $PWD/backend
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:5000"
+    volumes:
+      - $PWD/backend:/code
+
+
+
