@@ -18,7 +18,7 @@ def send_audio(path):
 @api_bp.post('/tts')
 def tts():
     VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
-    API_KEY = os.getenv('EL_API_KEY')
+    API_KEY = os.getenv('ELEVENLABS_API_KEY')
 
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/with-timestamps"
 

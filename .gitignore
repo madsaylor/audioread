@@ -6,3 +6,4 @@ backend/__pychache__
 frontend/.vscode
 frontend/node_modules
 *.env
+CLAUDE.md
