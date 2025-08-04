@@ -13,6 +13,7 @@ A text-to-speech application with synchronized word highlighting that converts t
 
 - **Frontend**: Vue 3 (Composition API), Vite, Bootstrap 5, Howler.js
 - **Backend**: Flask, ElevenLabs API
+- **Reverse Proxy**: Caddy web server for SSL termination and routing
 - **Deployment**: Docker Compose
 
 ## Quick Start
@@ -20,10 +21,10 @@ A text-to-speech application with synchronized word highlighting that converts t
 ### Using Docker (Recommended)
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
-This will start both frontend (http://localhost:5173) and backend (http://localhost:8000) services.
+This will start all services with Caddy reverse proxy on http://localhost:8088.
 
 ### Manual Setup
 
@@ -33,7 +34,7 @@ cd backend
 pip install -r requirements.txt
 python app.py
 ```
-The Flask server will run on port 5000 (exposed as 8000 in Docker).
+The Flask server will run on port 5000 (accessible through Caddy proxy).
 
 #### Frontend Setup
 ```bash
@@ -41,7 +42,7 @@ cd frontend
 npm install
 npm run dev
 ```
-The Vue application will run on http://localhost:5173.
+The Vue application will run on http://localhost:5173 (accessible through Caddy proxy).
 
 ## Usage
 
@@ -65,9 +66,10 @@ The ElevenLabs API key is currently hardcoded in `backend/app.py`. For productio
 ```bash
 docker compose up
 ```
-This starts both services with:
-- Frontend: http://localhost:5173 (with hot reload via volume mount)
-- Backend: http://localhost:8000 (with hot reload via volume mount)
+This starts all services with:
+- Application: http://localhost:8088 (Caddy reverse proxy)
+- Frontend: Direct access via volume mount with hot reload
+- Backend: Direct access via volume mount with hot reload
 
 ### Development Commands
 ```bash
@@ -86,6 +88,7 @@ docker compose up --build
 # Access container shell for debugging
 docker compose exec frontend sh
 docker compose exec backend bash
+docker compose exec caddy sh
 ```
 
 ### Development Notes
