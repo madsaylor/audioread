@@ -3,19 +3,19 @@ import json
 import base64
 import os
 
-from flask import Flask, request, send_from_directory
-from flask_cors import CORS
+from flask import Flask, request, send_from_directory, url_for, Blueprint
+
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 
-@app.route('/audio/<path:path>')
-def send_report(path):
+@api_bp.route('/audio/<path:path>')
+def send_audio(path):
     return send_from_directory('audio', path)
 
 
-@app.post('/tts')
+@api_bp.post('/tts')
 def tts():
     VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
     API_KEY = os.getenv('EL_API_KEY')
@@ -87,4 +87,12 @@ def tts():
                 result['words'].append(word)
                 result['end_time'].append(meta_data['character_end_times_seconds'][i])
 
-    return {'adjusted_alignment': result, 'audioUrl': f'http://localhost:8000/{filename}'}
+    audio_path = filename.replace('audio/', '')
+    return {
+        'adjusted_alignment': result,
+        'audioUrl': url_for('api.send_audio', path=audio_path, _external=True)
+    }
+
+
+app.register_blueprint(api_bp)
+

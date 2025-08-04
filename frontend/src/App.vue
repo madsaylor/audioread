@@ -30,7 +30,7 @@ function reset(){
 
 async function sendText() {
   try {
-    const response = await fetch('http://localhost:8000/tts', {
+    const response = await fetch('/api/tts', {
       method: 'POST',
       body:text.value,
     });

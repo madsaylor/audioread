@@ -1,10 +1,20 @@
 services:
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "8088:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
   frontend:
     build:
       context: $PWD/frontend
       dockerfile: ./Dockerfile
-    ports:
-      - "5173:5173"
     volumes:
       - $PWD/frontend:/app
     command: npm run dev
@@ -13,12 +23,14 @@ services:
     build:
       context: $PWD/backend
       dockerfile: ./Dockerfile
-    ports:
-      - "8000:5000"
     volumes:
       - $PWD/backend:/code
     env_file:
       - dev.env
+
+volumes:
+  caddy_data:
+  caddy_config:
 
 
 
