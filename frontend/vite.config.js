@@ -8,11 +8,10 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  server: {
-    host: "0.0.0.0"
-  },
   build: {
-    outDir: '../dist'
+    outDir: '../dist',
+    emptyOutDir: true,
+    manifest: true,
   },
   resolve: {
     alias: {

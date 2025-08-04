@@ -1,5 +1,6 @@
 .vite
 .idea
+dist/
 backend/audio/
 backend/.DS_Store
 backend/__pychache__
