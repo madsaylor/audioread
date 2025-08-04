@@ -13,6 +13,9 @@
 		output stdout
 		format console
 	}
+	basicauth {
+		admin {$BASIC_AUTH_PASS}
+	}
 	reverse_proxy /api/* backend:5000
 	root * /srv
 	file_server
