@@ -1,7 +1,7 @@
 .vite
 .idea
 dist/
-backend/audio/
+backend/audio/*.mp3
 backend/.DS_Store
 backend/__pychache__
 frontend/.vscode
