@@ -18,13 +18,13 @@ def send_report(path):
 @app.post('/tts')
 def tts():
     VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
-    YOUR_XI_API_KEY = "sk_7011b1d8b73528fd3a61e43e786d2dfe61dd06a2744efffa"
+    API_KEY = os.getenv('EL_API_KEY')
 
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/with-timestamps"
 
     headers = {
         "Content-Type": "application/json",
-        "xi-api-key": YOUR_XI_API_KEY
+        "xi-api-key": API_KEY
     }
 
     text = request.data.decode('utf-8')
@@ -87,4 +87,4 @@ def tts():
                 result['words'].append(word)
                 result['end_time'].append(meta_data['character_end_times_seconds'][i])
 
-    return {'adjusted_alignment': result, 'audioUrl': f'http://localhost:8000/{filename}'       }
+    return {'adjusted_alignment': result, 'audioUrl': f'http://localhost:8000/{filename}'}

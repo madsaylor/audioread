@@ -14,20 +14,18 @@ const audioMeta = ref({
   audioUrl: ''
 })
 
-const audioLength = computed(() => {
-  const arrayLength = audioMeta.value.end_time.length
-  return arrayLength > 0?  audioMeta.value.end_time[arrayLength - 1]: 0
-})
-
-function playSound(){
-  const sound = new Howl({
-    src: [audioMeta.value.audioUrl]
-  });
-  sound.play();
-}
+const currentWordIndex = ref(0)
 
 function handleTimeupdate(event){
-    console.log('Current time: ' + event.target.currentTime);
+  const position = event.target.currentTime;
+  const startTime = audioMeta.value.start_time.map((time, index) => ({ time, index }))
+  .filter( item => position >= item.time).pop();
+  currentWordIndex.value = startTime.index
+}
+
+function reset(){
+  currentWordIndex.value = 0
+  textSent.value = false
 }
 
 async function sendText() {
@@ -86,17 +84,15 @@ async function sendText() {
                 <button class="btn btn-primary w-25" @click="sendText">Listen</button>
               </div>
               <div v-if="textSent">
-                <div style="min-height: 100px;" >
-                  <span v-for="(word, index) in audioMeta.words" :id="`word${index}`" cl>{{word}}&nbsp;</span>
+                <div style="min-height: 100px;" class="d-flex flex-row flex-wrap align-content-start" >
+                  <span v-for="(word, index) in audioMeta.words" :id="`word${index}`"
+                        :class="{'bg-info-subtle': index === currentWordIndex}">{{word}}&nbsp;</span>
                 </div>
-<!--                <div class="d-flex flex-row justify-content-between">-->
-<!--                  <div>{{audioMeta.currentPosition}} / {{audioLength}}</div>-->
-<!--                </div>-->
-<!--                <input type="range" class="form-range" id="customRange1" v-model="audioMeta.currentPosition" min="0" :max="audioLength" step="0.01">-->
-<!--                <button class="btn btn-primary me-1" @click="textSent = false">Edit</button>-->
-<!--                <button class="btn btn-primary" @click="playSound">Play</button>-->
-<!--                <button class="btn btn-primary ms-1" @click="audioMeta.currentPosition = 0">Replay</button>-->
-                  <audio id="audio-player" :src="audioMeta.audioUrl" @timeupdate="handleTimeupdate" controls></audio>
+                <div class="d-flex mt-5">
+                  <button class="btn btn-primary btn-sm me-1 w-25" @click="reset">Edit</button>
+                  <audio id="audio-player" class="w-75"
+                       :src="audioMeta.audioUrl" @timeupdate="handleTimeupdate" controls></audio>
+                </div>
               </div>
             </div>
           </div>
